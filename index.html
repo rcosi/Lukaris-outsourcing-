@@ -212,7 +212,21 @@
     @media(max-width:760px){.faq-layout{grid-template-columns:1fr;gap:20px}.whatsapp-float{right:14px;bottom:14px;padding:13px;border-radius:50%;width:54px;height:54px;justify-content:center}.whatsapp-float span{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}}
     .reveal{animation:fade-up .65s ease both}
     @keyframes fade-up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-    @media (prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+    /* Microinteracciones elegantes: movimiento suave, sin distraer */
+    .hero-orbit{animation:orbit-drift 18s ease-in-out infinite alternate;transform-origin:center}
+    .hero-logo{animation:logo-float 5.8s ease-in-out infinite;will-change:transform}
+    .orbit-dot{animation:dot-pulse 3.2s ease-in-out infinite}
+    .hero:after{animation:ring-drift 16s ease-in-out infinite alternate}
+    .service-card,.plan-card,.process-card{transition:transform .28s ease,border-color .28s ease,box-shadow .28s ease}
+    .plan-card:hover{transform:translateY(-5px);border-color:rgba(201,164,94,.58);box-shadow:0 18px 42px rgba(0,0,0,.18)}
+    .process-card:hover{transform:translateY(-3px)}
+    .whatsapp-float{transition:transform .25s ease,box-shadow .25s ease}
+    .whatsapp-float:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 12px 30px rgba(0,0,0,.28)}
+    @keyframes logo-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+    @keyframes orbit-drift{from{transform:rotate(-18deg) scale(1)}to{transform:rotate(-8deg) scale(1.025)}}
+    @keyframes dot-pulse{0%,100%{box-shadow:0 0 0 7px rgba(201,164,94,.08);transform:scale(.96)}50%{box-shadow:0 0 0 11px rgba(201,164,94,.14);transform:scale(1.08)}}
+    @keyframes ring-drift{from{transform:translate3d(0,0,0)}to{transform:translate3d(-12px,-10px,0)}}
+    @media (prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important;transform:none!important;}}
     @media(max-width:980px){.hero-grid{grid-template-columns:minmax(0,1fr) minmax(250px,.72fr);gap:34px}.hero-art{width:min(100%,340px)}.plans-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.plan-card{min-height:350px}.services-layout,.about-grid,.contact-grid{grid-template-columns:1fr 1fr;gap:35px}.service-card{padding:22px;min-height:205px}.nav{gap:16px}.nav a:not(.btn){font-size:.83rem}}
     @media(max-width:760px){.container{width:min(calc(100% - 36px),var(--max))}.nav-wrap{min-height:72px}.menu-toggle{display:inline-flex}.nav{position:fixed;inset:72px 0 auto;display:none;align-items:stretch;flex-direction:column;gap:0;padding:16px 22px 24px;background:#080b10;border-bottom:1px solid rgba(255,255,255,.12);box-shadow:0 18px 32px rgba(0,0,0,.25)}.nav.open{display:flex}.nav a:not(.btn){padding:15px 4px;font-size:1rem}.nav .btn{margin-top:10px}.hero-grid{grid-template-columns:1fr;padding-block:72px 48px}.hero h1{font-size:clamp(3.25rem,12vw,5.2rem)}.hero-art{width:min(76vw,320px);margin-top:8px}.clients-row{align-items:flex-start;flex-direction:column;gap:12px}.services-layout,.about-grid,.contact-grid{grid-template-columns:1fr}.section-head{margin-bottom:34px}.service-list{gap:10px}.service-card{min-height:0;padding:19px}.service-number{margin-bottom:18px}.service-card h3{font-size:1.45rem}.about-intro{position:static}.process-grid{grid-template-columns:1fr;gap:10px}.process-card{display:grid;grid-template-columns:55px 1fr;column-gap:16px;padding:22px 0}.step-number{grid-row:span 2;margin:0;font-size:2.8rem}.process-card h3{align-self:end}.process-card p{max-width:none}.contact-intro h2{font-size:clamp(3rem,11vw,4.5rem)}.footer-main{align-items:flex-start;flex-direction:column}.cookie-banner.visible{align-items:flex-start;flex-direction:column}.cookie-actions{width:100%}.cookie-actions .btn{flex:1}}
     @media(max-width:480px){.container{width:calc(100% - 32px)}.brand-name{font-size:.76rem;letter-spacing:.14em}.brand-mark{width:39px;height:39px}.hero-actions{align-items:stretch;flex-direction:column;width:100%}.hero-actions .btn{width:100%}.client-tags{gap:8px}.client-tags li{font-size:.82rem}.service-list,.plans-grid{grid-template-columns:1fr}.service-card{padding:22px}.plan-card{min-height:0;padding:25px}.plan-subtitle{min-height:0}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.contact-card{padding:23px 18px}.cookie-banner{right:10px;bottom:10px;left:10px;width:calc(100% - 20px);padding:18px}.cookie-actions{flex-direction:column}.cookie-actions .btn{width:100%}.footer-nav{align-items:flex-start;flex-direction:column;gap:10px}}
@@ -419,6 +433,16 @@
 
   <script>
     (() => {
+      // Detecta imágenes que no cargan y evita el icono roto del navegador.
+      document.querySelectorAll('img').forEach(img => {
+        img.addEventListener('error', () => {
+          img.classList.add('image-fallback');
+          img.alt = img.alt || 'Imagen de Lukaris Outsourcing no disponible';
+          img.style.visibility = 'hidden';
+          const parent = img.parentElement;
+          if (parent) parent.classList.add('image-unavailable');
+        }, { once: true });
+      });
       const menuButton = document.querySelector('.menu-toggle');
       const nav = document.getElementById('navegacion');
       const closeMenu = () => {
@@ -491,7 +515,11 @@
           'Quedo atento a su respuesta. ¡Gracias!'
         ];
         const url = 'https://wa.me/573027016566?text=' + encodeURIComponent(lines.join('\n'));
-        window.open(url, '_blank', 'noopener,noreferrer');
+        const waWindow = window.open(url, '_blank', 'noopener,noreferrer');
+        if (!waWindow) {
+          alert.hidden = false;
+          alert.textContent = 'Tu navegador bloqueó la apertura de WhatsApp. Permite las ventanas emergentes o usa el botón de WhatsApp de la página.';
+        }
       });
 
       const banner = document.getElementById('cookie-banner');
